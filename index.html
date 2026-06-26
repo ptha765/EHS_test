@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GJS - ระบบอบรมความปลอดภัย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Sarabun',system-ui,sans-serif; }
+  body { background:linear-gradient(to bottom,#f1f5f9,#e2e8f0); min-height:100vh; padding:24px 16px; color:#1e293b; }
+  .wrap { max-width:680px; margin:0 auto; }
+  .wrap-sm { max-width:430px; margin:0 auto; }
+  .card { background:#fff; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.08); border:1px solid #e2e8f0; padding:32px; }
+  .card-sm { padding:24px; border-radius:18px; margin-bottom:18px; }
+  .logo { display:flex; flex-direction:column; align-items:center; user-select:none; }
+  .logo svg { margin-bottom:4px; }
+  .logo .ns { font-weight:800; font-size:12px; letter-spacing:-.3px; line-height:1; }
+  .logo .ln { width:100%; height:1px; background:#1e293b; margin:2px 0; }
+  .logo .br { font-weight:700; font-size:14px; line-height:1; }
+  .logo .br .g { color:#15803d; font-style:italic; }
+  .logo .br .j { color:#dc2626; font-style:italic; margin-left:6px; }
+  .center { text-align:center; }
+  .icon-box { width:64px; height:64px; border-radius:18px; display:flex; align-items:center; justify-content:center; margin:0 auto; }
+  .blue-grad { background:linear-gradient(135deg,#2563eb,#1e40af); }
+  .green-grad { background:linear-gradient(135deg,#22c55e,#15803d); }
+  h1 { font-size:20px; font-weight:700; text-align:center; }
+  .sub { font-size:14px; color:#64748b; text-align:center; margin-top:4px; }
+  .badge { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:#1d4ed8; background:#eff6ff; padding:4px 12px; border-radius:999px; }
+  label { display:block; font-size:14px; font-weight:500; margin-bottom:4px; margin-top:14px; }
+  input { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:12px; outline:none; font-size:15px; }
+  input:focus { border-color:#2563eb; box-shadow:0 0 0 2px rgba(37,99,235,.2); }
+  .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:600; font-size:15px; cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn:disabled { background:#cbd5e1 !important; cursor:not-allowed; }
+  .btn-blue { background:#2563eb; color:#fff; } .btn-blue:hover:not(:disabled){ background:#1d4ed8; }
+  .btn-green { background:#16a34a; color:#fff; } .btn-green:hover:not(:disabled){ background:#15803d; }
+  .btn-amber { background:#f59e0b; color:#fff; } .btn-amber:hover:not(:disabled){ background:#d97706; }
+  .btn-slate { background:#334155; color:#fff; } .btn-slate:hover{ background:#1e293b; }
+  .btn-ghost { background:#fff; border:1px solid #cbd5e1; color:#334155; } .btn-ghost:hover{ background:#f8fafc; }
+  .btn-ghost.blue { border-color:#93c5fd; color:#1d4ed8; } .btn-ghost.blue:hover{ background:#eff6ff; }
+  .q-card { background:#fff; border-radius:18px; box-shadow:0 1px 4px rgba(0,0,0,.05); padding:20px; border:1px solid #e2e8f0; margin-bottom:16px; }
+  .q-card p.q { font-weight:600; margin-bottom:12px; }
+  .opt { width:100%; text-align:left; padding:10px 16px; border-radius:12px; border:1px solid #e2e8f0; background:#fff; font-size:14px; cursor:pointer; margin-bottom:8px; transition:.1s; }
+  .opt:hover { border-color:#cbd5e1; }
+  .opt.sel { border-color:#2563eb; background:#eff6ff; }
+  .opt.correct { border-color:#4ade80; background:#f0fdf4; }
+  .opt.wrong { border-color:#f87171; background:#fef2f2; }
+  .opt:disabled { cursor:default; }
+  .tag-ok { float:right; color:#16a34a; font-size:12px; font-weight:700; }
+  .lesson { border-radius:18px; border:1px solid; padding:20px; margin-bottom:16px; }
+  .lesson h3 { font-weight:700; color:#1e293b; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+  .lesson .li { display:flex; gap:8px; font-size:14px; color:#334155; margin-bottom:8px; }
+  .l-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; }
+  .scorebox { border-radius:12px; padding:16px; border:1px solid; text-align:center; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  .num { font-size:26px; font-weight:700; }
+  .status { font-size:13px; margin-bottom:18px; min-height:20px; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .hidden { display:none; }
+  .sticky { position:sticky; top:12px; z-index:10; display:flex; align-items:center; gap:12px; }
+  .row-btns { display:flex; gap:12px; flex-wrap:wrap; }
+  .row-btns > * { flex:1; min-width:160px; }
+  .divider { border-top:1px solid #f1f5f9; margin-top:20px; padding-top:20px; }
+  .spin { animation:spin 1s linear infinite; display:inline-block; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ============ ตั้งค่า Google Apps Script URL ============
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwg1lpaOm-HY0l3s1kqkttDB6gUGK1PpLOX2mLOHPNg3BlORKX9g21P_yXtAMDhrYUn/exec";
+// =======================================================
+
+const QUESTIONS = [
+  { q:"เมื่อพบเห็นสภาพการทำงานที่ไม่ปลอดภัย พนักงานต้องทำอย่างไร?", options:["เพิกเฉยเพราะไม่ใช่หน้าที่","รายงานหัวหน้างานทันที","แก้ไขเองโดยไม่บอกใคร","รอให้คนอื่นแจ้ง"], answer:1 },
+  { q:"อุปกรณ์ป้องกันอันตรายที่เครื่องจักร (Safety Guard) สามารถถอดออกได้เมื่อใด?", options:["เมื่อต้องการทำงานเร็วขึ้น","ถอดได้ตลอดเวลา","ห้ามถอด ยกเว้นเพื่อซ่อมแซมหรือบำรุงรักษา","เมื่อหัวหน้าไม่อยู่"], answer:2 },
+  { q:"การยกของด้วยแรงกาย 1 คน น้ำหนักไม่ควรเกินเท่าใด?", options:["10 กิโลกรัม","15 กิโลกรัม","20 กิโลกรัม","30 กิโลกรัม"], answer:2 },
+  { q:"ในที่อับอากาศ ระดับออกซิเจนต่ำกว่าเท่าใดจึงทำให้หมดสติได้?", options:["ต่ำกว่า 19.5%","ต่ำกว่า 25%","ต่ำกว่า 30%","ต่ำกว่า 15%"], answer:0 },
+  { q:"เมื่อพบผู้ถูกไฟฟ้าช็อต ควรทำอย่างไรเป็นอันดับแรก?", options:["จับตัวผู้ประสบภัยออกมาทันที","ปิดสวิทช์ไฟ หรือใช้วัตถุที่ไม่นำไฟฟ้าเขี่ยสายไฟออก","ราดน้ำให้ตื่น","วิ่งหนีออกจากพื้นที่"], answer:1 },
+  { q:"ความเร็วในการขับรถยก (Forklift) ในโรงงานต้องไม่เกินเท่าใด?", options:["5 กม./ชม.","10 กม./ชม.","20 กม./ชม.","30 กม./ชม."], answer:1 },
+  { q:"งานที่ก่อให้เกิดความร้อนและประกายไฟ (Hot Work) ต้องทำสิ่งใดก่อน?", options:["เริ่มงานได้เลย","ขออนุญาตด้วย Hot Work Permit","แจ้งเพื่อนร่วมงาน","ใส่ถุงมือเท่านั้น"], answer:1 },
+  { q:"PPE พื้นฐานของ GJS ที่ไม่มีการยกเว้นในเขตโรงงานชั้นในคืออะไร?", options:["หมวกนิรภัย","แว่นตานิรภัย","รองเท้านิรภัย","ถุงมือ"], answer:2 },
+  { q:"เมื่อได้ยินเสียงสัญญาณฉุกเฉิน พนักงานควรทำอย่างไร?", options:["ทำงานต่อไป","รีบไปยังจุดรวมพลหรือสถานที่ปลอดภัยโดยด่วน","ปิดเครื่องจักรแล้วรอ","โทรหาหัวหน้า"], answer:1 },
+  { q:"การต่ออายุใบอนุญาตทำงาน (Work Permit) รวมเวลาปฏิบัติงานทั้งสิ้นต้องไม่เกินกี่ชั่วโมง?", options:["8 ชั่วโมง","12 ชั่วโมง","24 ชั่วโมง","48 ชั่วโมง"], answer:2 },
+];
+
+const LESSONS = [
+  { color:"#2563eb", bg:"#eff6ff", bd:"#bfdbfe", ic:"🛡️", title:"กฎความปลอดภัยทั่วไป", points:[
+    "ตระหนักถึงความปลอดภัยเสมอ และศึกษาคู่มือก่อนปฏิบัติงานทุกครั้ง",
+    "เชื่อฟังป้ายเตือนและสัญลักษณ์ความปลอดภัยอย่างเคร่งครัด",
+    "สวมใส่อุปกรณ์คุ้มครองความปลอดภัยส่วนบุคคล (PPE) ให้เหมาะกับงาน",
+    "ห้ามถอดอุปกรณ์ป้องกันอันตรายที่เครื่องจักร ยกเว้นเพื่อซ่อมบำรุง",
+    "พบสภาพไม่ปลอดภัยหรือเกิดอุบัติเหตุ ต้องแจ้งหัวหน้างานทันที",
+    "ห้ามนำสุรา ยาเสพติด อาวุธ วัตถุระเบิดเข้าโรงงานเด็ดขาด" ] },
+  { color:"#dc2626", bg:"#fef2f2", bd:"#fecaca", ic:"🔥", title:"ความปลอดภัยเกี่ยวกับอัคคีภัย", points:[
+    "บริเวณป้าย 'ระวังสารไวไฟ' ห้ามจุดไฟ สูบบุหรี่ หรือมีแหล่งความร้อน",
+    "สูบบุหรี่ในสถานที่ที่กำหนดเท่านั้น และตรวจให้แน่ใจว่าไฟดับจริง",
+    "ได้กลิ่นไหม้หรือพบควันผิดปกติ ให้แจ้งเหตุทันที",
+    "ห้ามวางสิ่งของกีดขวางทางหนีไฟ ประตู บันได และทางออกฉุกเฉิน",
+    "ดูแลเครื่องดับเพลิงให้พร้อมใช้งาน วิธีใช้: ดึง-ปลด-กด-ส่าย (P.A.S.S.)" ] },
+  { color:"#f59e0b", bg:"#fffbeb", bd:"#fde68a", ic:"⚡", title:"ความปลอดภัยเกี่ยวกับไฟฟ้า", points:[
+    "หากตัวเปียกชื้น ห้ามจับต้องอุปกรณ์เครื่องใช้ไฟฟ้า",
+    "การเสียบ/ถอดปลั๊ก ต้องจับที่ตัวเต้าเสียบ ห้ามดึงที่สายไฟ",
+    "การซ่อมบำรุงไฟฟ้าต้องทำโดยช่างไฟฟ้าเท่านั้น และต้องต่อสายดิน",
+    "พบผู้ถูกไฟฟ้าช็อต: ปิดสวิทช์ไฟ หรือใช้วัตถุไม่นำไฟฟ้าเขี่ยสายออก ห้ามจับตัวโดยตรง",
+    "เหตุในโรงงานแจ้ง 1304 / เหตุฉุกเฉินทางการแพทย์ โทร 1669" ] },
+  { color:"#16a34a", bg:"#f0fdf4", bd:"#bbf7d0", ic:"🦺", title:"การยกของและเครื่องจักร", points:[
+    "ประเมินน้ำหนักก่อนยก หากไม่เกิน 20 กก. จึงยกด้วยแรงกาย 1 คนได้",
+    "ยกของ: ย่อเข่า หลังตรง ให้วัสดุชิดตัวมากที่สุด ยกขึ้นช้าๆ",
+    "ของหนักเกิน หรือยกคนเดียวไม่ได้ ให้เรียกเพื่อนช่วยหรือใช้อุปกรณ์ช่วยยก",
+    "ห้ามใช้อุปกรณ์/เครื่องจักรโดยไม่ผ่านการฝึกอบรม",
+    "ขณะเดินเครื่อง ห้ามละทิ้งเครื่องจักรไว้โดยไม่มีผู้ควบคุม" ] },
+  { color:"#ea580c", bg:"#fff7ed", bd:"#fed7aa", ic:"🧪", title:"สารเคมีและ Work Permit", points:[
+    "ศึกษาเอกสารข้อมูลความปลอดภัย (SDS) ของสารเคมีทุกชนิดก่อนใช้งาน",
+    "ห้ามใช้ปากดูดสารเคมี และสวม PPE ทุกครั้งที่ทำงานกับสารเคมี",
+    "งานเสี่ยงต้องขอ Work Permit: Hot work, High level, Confined space, High voltage, Excavate, Radioactive",
+    "งานบนที่สูงตั้งแต่ 2 เมตร ต้องตรวจความดันโลหิตและชีพจรก่อนทำงาน",
+    "การต่ออายุ Work Permit รวมเวลาทั้งสิ้นต้องไม่เกิน 24 ชั่วโมง" ] },
+];
+
+const FULL_DOC_VIEW = "https://drive.google.com/file/d/1NqFykiNzSEKE-3_9PWw1AfvSX1Z6BK4X/view?usp=drive_link";
+const FULL_DOC_DOWNLOAD = "https://drive.google.com/uc?export=download&id=1NqFykiNzSEKE-3_9PWw1AfvSX1Z6BK4X";
+
+// ---- state ----
+let state = { stage:"login", empId:"", empName:"", preScore:null, postScore:null, submit:"idle", answers:{}, submitted:false, quizType:null };
+
+const logoSVG = `<svg width="40" height="40" viewBox="0 0 100 100">
+  <rect x="20" y="8" width="60" height="60" fill="#7dd3f0"/>
+  <polygon points="50,8 20,68 80,68" fill="#1d8fe0"/>
+  <polygon points="50,8 20,8 20,38" fill="#a5e0f5" opacity="0.7"/>
+  <polygon points="50,8 80,8 80,38" fill="#a5e0f5" opacity="0.7"/>
+  <polygon points="50,8 35,8 50,38" fill="#cdeefb"/>
+  <polygon points="50,8 65,8 50,38" fill="#cdeefb"/></svg>`;
+
+function logoHTML(small){
+  return `<div class="logo"${small?' style="transform:scale(.8)"':''}>${logoSVG}
+    <p class="ns">NIPPON STEEL</p><div class="ln"></div>
+    <p class="br"><span class="g">GSteel</span><span class="j">GJS</span></p></div>`;
+}
+function docBtns(){
+  return `<div class="row-btns">
+    <a class="btn btn-ghost blue" href="${FULL_DOC_VIEW}" target="_blank" rel="noopener">📖 เปิดอ่านเอกสารฉบับเต็ม</a>
+    <a class="btn btn-ghost" href="${FULL_DOC_DOWNLOAD}" target="_blank" rel="noopener">⬇️ ดาวน์โหลดเอกสาร (PDF)</a>
+  </div>`;
+}
+
+function render(){
+  const app = document.getElementById("app");
+  if(state.stage==="login") app.innerHTML = loginView();
+  else if(state.stage==="pretest"||state.stage==="posttest") app.innerHTML = quizView();
+  else if(state.stage==="lesson") app.innerHTML = lessonView();
+  else if(state.stage==="done") app.innerHTML = doneView();
+  bind();
+}
+
+function loginView(){
+  return `<div class="wrap-sm"><div class="card">
+    <div style="display:flex;justify-content:center;margin-bottom:20px">${logoHTML()}</div>
+    <div class="center" style="margin-bottom:20px">
+      <div class="icon-box blue-grad" style="margin-bottom:12px">🛡️</div>
+      <h1>ระบบอบรมความปลอดภัย</h1>
+      <p class="sub">อาชีวอนามัยและสภาพแวดล้อมในการทำงาน</p>
+      <span class="badge">GJS · New Employee Orientation</span>
+    </div>
+    <label>รหัสพนักงาน</label>
+    <input id="empId" placeholder="กรอกรหัสพนักงาน" value="${state.empId}">
+    <label>ชื่อ - นามสกุล</label>
+    <input id="empName" placeholder="กรอกชื่อ-นามสกุล" value="${state.empName}">
+    <button class="btn btn-blue" id="startBtn" style="margin-top:24px">เริ่มทำแบบทดสอบ ›</button>
+  </div></div>`;
+}
+
+function quizView(){
+  const isPre = state.stage==="pretest";
+  const title = isPre?"แบบทดสอบก่อนเรียน (Pre-test)":"แบบทดสอบหลังเรียน (Post-test)";
+  const acc = isPre?"#f59e0b":"#16a34a";
+  const answered = Object.keys(state.answers).length;
+  let qs = QUESTIONS.map((q,i)=>{
+    let opts = q.options.map((opt,j)=>{
+      let cls="opt";
+      if(state.submitted){ if(j===q.answer)cls+=" correct"; else if(state.answers[i]===j)cls+=" wrong"; }
+      else if(state.answers[i]===j)cls+=" sel";
+      const tag = state.submitted&&j===q.answer?'<span class="tag-ok">✓ ถูก</span>':'';
+      return `<button class="${cls}" data-q="${i}" data-o="${j}" ${state.submitted?'disabled':''}>${opt}${tag}</button>`;
+    }).join("");
+    return `<div class="q-card"><p class="q">${i+1}. ${q.q}</p>${opts}</div>`;
+  }).join("");
+
+  let footer;
+  if(!state.submitted){
+    const all = answered===QUESTIONS.length;
+    footer = `<button class="btn ${isPre?'btn-amber':'btn-green'}" id="submitQuiz" ${all?'':'disabled'} style="margin-top:24px">
+      ส่งคำตอบ ${all?'':`(เหลืออีก ${QUESTIONS.length-answered} ข้อ)`}</button>`;
+  } else {
+    const score = QUESTIONS.reduce((a,q,i)=>a+(state.answers[i]===q.answer?1:0),0);
+    footer = `<div class="card center" style="margin-top:24px">
+      <p style="color:#475569;margin-bottom:4px">คะแนนของคุณ</p>
+      <p class="num" style="font-size:36px;margin-bottom:16px">${score}<span style="font-size:20px;color:#94a3b8">/${QUESTIONS.length}</span></p>
+      <button class="btn btn-blue" id="nextStage">ดำเนินการต่อ ›</button></div>`;
+  }
+  return `<div class="wrap">
+    <div class="card card-sm sticky" style="padding:18px">
+      <span style="font-size:22px">📝</span>
+      <div><h1 style="font-size:16px;text-align:left">${title}</h1>
+      <p style="font-size:12px;color:#64748b">ตอบครบ ${answered}/${QUESTIONS.length} ข้อ</p></div>
+    </div>${qs}${footer}</div>`;
+}
+
+function lessonView(){
+  let cards = LESSONS.map((l,i)=>{
+    let pts = l.points.map(p=>`<div class="li"><span style="opacity:.6">✓</span><span>${p}</span></div>`).join("");
+    return `<div class="lesson" style="background:${l.bg};border-color:${l.bd}">
+      <h3><span class="l-icon" style="background:${l.color}">${l.ic}</span>${i+1}. ${l.title}</h3>${pts}</div>`;
+  }).join("");
+  return `<div class="wrap">
+    <div class="card card-sm" style="display:flex;align-items:center;gap:16px;padding:24px">
+      <div class="icon-box blue-grad" style="width:48px;height:48px;border-radius:12px">📖</div>
+      <div><h1 style="font-size:18px;text-align:left">เนื้อหาบทเรียน — สรุปกฎความปลอดภัย</h1>
+      <p style="font-size:14px;color:#64748b">คะแนน Pre-test: <b style="color:#d97706">${state.preScore}/${QUESTIONS.length}</b> · อ่านให้ครบก่อนทำ Post-test</p></div>
+    </div>
+    ${cards}
+    <div class="card card-sm" style="background:#eff6ff;border-color:#bfdbfe">
+      <p style="font-size:14px;font-weight:600;color:#1e40af;margin-bottom:12px">📄 เอกสารประกอบการอบรม (ฉบับเต็ม)</p>
+      ${docBtns()}
+    </div>
+    <button class="btn btn-green" id="goPost" style="margin-top:8px">ทำแบบทดสอบหลังเรียน (Post-test) ›</button>
+  </div>`;
+}
+
+function doneView(){
+  const improved = state.postScore - state.preScore;
+  let statusHTML="";
+  if(state.submit==="idle") statusHTML=`<span style="color:#94a3b8;font-size:12px">กดปุ่มด้านล่างเพื่อบันทึกผลลง Google Sheet</span>`;
+  else if(state.submit==="sending") statusHTML=`<span style="color:#64748b"><span class="spin">⏳</span> กำลังบันทึกผล...</span>`;
+  else if(state.submit==="ok") statusHTML=`<span style="color:#16a34a">✓ บันทึกผลทดสอบเรียบร้อยแล้ว</span>`;
+  else if(state.submit==="error") statusHTML=`<span style="color:#d97706;font-size:12px">⚠️ บันทึกไม่สำเร็จ — ลองกดบันทึกอีกครั้ง</span>`;
+
+  const saveBtn = state.submit==="ok" ? "" :
+    `<button class="btn btn-blue" id="saveBtn" ${state.submit==="sending"?'disabled':''} style="margin-bottom:12px">
+      ${state.submit==="sending"?'<span class="spin">⏳</span> ':'💾 '}${state.submit==="error"?'บันทึกผลทดสอบอีกครั้ง':'บันทึกผลทดสอบ'}</button>`;
+
+  return `<div class="wrap-sm"><div class="card center">
+    <div style="display:flex;justify-content:center;margin-bottom:16px">${logoHTML(true)}</div>
+    <div class="icon-box green-grad" style="margin-bottom:16px">🏅</div>
+    <h1>เสร็จสิ้นการอบรม!</h1>
+    <p class="sub" style="margin-bottom:24px">${state.empName} · รหัส ${state.empId}</p>
+    <div class="grid2">
+      <div class="scorebox" style="background:#fffbeb;border-color:#fde68a">
+        <p style="font-size:12px;color:#b45309;font-weight:500;margin-bottom:4px">Pre-test</p>
+        <p class="num" style="color:#d97706">${state.preScore}<span style="font-size:14px;color:#fbbf24">/${QUESTIONS.length}</span></p></div>
+      <div class="scorebox" style="background:#f0fdf4;border-color:#bbf7d0">
+        <p style="font-size:12px;color:#15803d;font-weight:500;margin-bottom:4px">Post-test</p>
+        <p class="num" style="color:#16a34a">${state.postScore}<span style="font-size:14px;color:#4ade80">/${QUESTIONS.length}</span></p></div>
+    </div>
+    ${improved>0?`<p style="font-size:14px;color:#15803d;background:#f0fdf4;border-radius:8px;padding:8px;margin-bottom:16px">📈 พัฒนาขึ้น ${improved} คะแนน เยี่ยมมาก!</p>`:''}
+    <div class="status">${statusHTML}</div>
+    ${saveBtn}
+    <div class="divider">
+      ${docBtns()}
+      <button class="btn btn-slate" id="logoutBtn" style="margin-top:12px">⏏️ ออกจากระบบ (Logout)</button>
+    </div>
+  </div></div>`;
+}
+
+// ---- ส่งข้อมูลเข้า Google Sheet ----
+async function submitToSheet(){
+  if(!GOOGLE_SCRIPT_URL){ state.submit="error"; render(); return; }
+  state.submit="sending"; render();
+  const payload = { empId:state.empId, empName:state.empName, preScore:state.preScore, postScore:state.postScore, total:QUESTIONS.length, timestamp:new Date().toLocaleString("th-TH") };
+  try{
+    await fetch(GOOGLE_SCRIPT_URL,{ method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
+    state.submit="ok";
+  }catch(e){ state.submit="error"; }
+  render();
+}
+
+// ---- event binding ----
+function bind(){
+  const startBtn=document.getElementById("startBtn");
+  if(startBtn) startBtn.onclick=()=>{
+    const id=document.getElementById("empId").value.trim();
+    const nm=document.getElementById("empName").value.trim();
+    if(id&&nm){ state.empId=id; state.empName=nm; state.stage="pretest"; state.answers={}; state.submitted=false; render(); }
+  };
+  document.querySelectorAll(".opt[data-q]").forEach(b=>{
+    b.onclick=()=>{ state.answers[b.dataset.q]=parseInt(b.dataset.o); render(); };
+  });
+  const sq=document.getElementById("submitQuiz");
+  if(sq) sq.onclick=()=>{ state.submitted=true; render(); };
+  const ns=document.getElementById("nextStage");
+  if(ns) ns.onclick=()=>{
+    const score=QUESTIONS.reduce((a,q,i)=>a+(state.answers[i]===q.answer?1:0),0);
+    if(state.stage==="pretest"){ state.preScore=score; state.stage="lesson"; }
+    else { state.postScore=score; state.stage="done"; state.submit="idle"; }
+    render();
+  };
+  const gp=document.getElementById("goPost");
+  if(gp) gp.onclick=()=>{ state.stage="posttest"; state.answers={}; state.submitted=false; render(); };
+  const sb=document.getElementById("saveBtn");
+  if(sb) sb.onclick=submitToSheet;
+  const lo=document.getElementById("logoutBtn");
+  if(lo) lo.onclick=()=>{ state={ stage:"login", empId:"", empName:"", preScore:null, postScore:null, submit:"idle", answers:{}, submitted:false }; render(); };
+}
+
+render();
+</script>
+</body>
+</html>
